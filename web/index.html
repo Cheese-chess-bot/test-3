@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="purple-session" content="__SESSION_TOKEN__">
+  <title>Purple Desk · Local AI workspace</title>
+  <link rel="stylesheet" href="/style.css"><script defer src="/app.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="Purple Desk home"><span class="brand-mark">p<span>·</span></span><span>Purple Desk<small>YOUR LOCAL WORKSPACE</small></span></a>
+    <div class="side-label">WORKBENCH</div>
+    <nav><button class="nav active" data-view="workspace"><span>▧</span> Workspace</button><button class="nav" data-view="providers"><span>⇄</span> Providers <i id="key-dot"></i></button></nav>
+    <div class="history-heading"><span class="side-label">RECENT TASKS</span><span id="task-count">0</span></div>
+    <div id="history" class="history"><p class="muted">Your work will appear here.</p></div>
+    <div class="side-bottom"><span class="local-dot"></span> Runs on your computer<small>PROTOTYPE 01 · LOCALHOST</small></div>
+  </aside>
+  <main>
+    <header class="topbar"><div><span class="breadcrumb">WORKBENCH / </span><span id="page-name">Workspace</span></div><span class="pill"><span class="local-dot"></span> Local session</span></header>
+    <section id="workspace-view" class="view">
+      <div class="hero"><div><div class="eyebrow">BUILD. TEST. UNDERSTAND.</div><h1>Give your next idea<br>a place to work.</h1><p>A focused AI worker for code and local security labs.</p></div><button id="quick-demo" class="secondary demo-button">Try the no-key demo <span>↗</span></button></div>
+      <div class="metrics"><div><span class="metric-label">TASK STATUS</span><strong id="metric-status">Ready to start</strong></div><div><span class="metric-label">CURRENT PROVIDER</span><strong id="metric-provider">NVIDIA → OpenRouter</strong></div><div><span class="metric-label">STEPS USED</span><strong id="metric-steps">— <small>/ 20</small></strong></div><div><span class="metric-label">FREE FALLBACK TODAY</span><strong id="metric-quota">0 <small>/ 45 local cap</small></strong></div></div>
+      <div class="work-grid">
+        <section class="panel task-panel"><div class="panel-heading"><h2>Start a task</h2><span class="tiny-label">01</span></div>
+          <form id="task-form">
+            <label for="task">What should we work on?</label>
+            <textarea id="task" required minlength="5" maxlength="12000" placeholder="Build a small Python tool, add tests, and show me what works…"></textarea>
+            <div class="prompt-chips"><button type="button" id="coding-preset">⌘ Coding task</button><button type="button" id="lab-preset">◇ Purple-team lab</button></div>
+            <div class="form-row"><div><label for="mode">Run mode</label><select id="mode"><option value="live">Live AI agent</option><option value="demo">Offline scripted demo</option></select></div><div class="steps-field"><label for="max-steps">Step budget</label><input id="max-steps" type="number" min="3" max="40" value="20"></div></div>
+            <label class="checkbox"><input type="checkbox" id="lab"> Include local security lab files</label>
+            <div class="scope-note"><span>↳</span><p>Files stay in this task’s workspace. Generated commands run in a Docker container with networking disabled.</p></div>
+            <button type="submit" class="primary" id="run-task">Start working <span>→</span></button>
+          </form>
+          <div class="sandbox-line"><div><span id="sandbox-dot" class="status-dot"></span><span id="sandbox-message">Checking sandbox…</span></div><button id="prepare-sandbox" class="text-button">Prepare sandbox</button></div>
+        </section>
+        <section class="panel activity-panel"><div class="panel-heading"><h2>Activity</h2><div class="run-actions"><button id="resume-task" class="text-button" hidden>Resume</button><button id="stop-task" class="stop-button" hidden>■ Stop</button><span id="live-indicator" class="tiny-label">WAITING</span></div></div>
+          <div id="task-reason" class="notice" hidden></div>
+          <div id="activity" class="activity" aria-live="polite"><div class="empty"><div class="orbit">✳</div><h3>A clear view of the work.</h3><p>Follow actions, tool results, and provider changes.<br>Start a task or try the demo to see it in motion.</p><span class="empty-foot">NO BACKGROUND TASKS RUNNING</span></div></div>
+        </section>
+      </div>
+      <div class="results-grid">
+        <section class="panel"><div class="panel-heading"><h2>Workspace files <span id="file-count" class="count">0</span></h2><button id="export-files" class="text-button" disabled>Download files ↗</button></div><div id="file-list" class="file-list"><p class="muted">Files created by your worker will appear here.</p></div><pre id="file-preview" hidden></pre></section>
+        <section class="panel"><div class="panel-heading"><h2>Result & evidence</h2><span class="tiny-label">REPORT</span></div><pre id="report" class="report">The final report will show what changed, what was tested, and what still needs attention.</pre></section>
+      </div>
+      <footer>Built for your next experiment.<span>One worker · persistent tasks · free-only OpenRouter routing</span></footer>
+    </section>
+    <section id="providers-view" class="view" hidden>
+      <div class="hero"><div><div class="eyebrow">YOUR KEYS. YOUR WORKSPACE.</div><h1>Connect the worker.</h1><p>NVIDIA first. Free OpenRouter models when needed.</p></div></div>
+      <form id="settings-form" class="provider-grid">
+        <section class="panel provider-card"><span class="provider-number">01 / PRIMARY</span><h2>NVIDIA hosted API</h2><p>Free developer access for prototyping and evaluation. Your laptop does not need an NVIDIA GPU.</p><label for="nvidia-key">API key <span id="nvidia-key-state"></span></label><input id="nvidia-key" type="password" autocomplete="off" placeholder="Enter your NVIDIA API key"><label class="checkbox"><input id="clear-nvidia" type="checkbox"> Remove saved key</label><label for="nvidia-model">Model ID</label><input id="nvidia-model" type="text"><div class="provider-links"><a href="https://build.nvidia.com/" target="_blank" rel="noreferrer">Get a key ↗</a><button type="button" class="secondary" id="test-nvidia">Test connection</button></div></section>
+        <section class="panel provider-card"><span class="provider-number">02 / FALLBACK</span><h2>OpenRouter free</h2><p>Only the free router or verified :free models are accepted. No paid model fallback.</p><label for="openrouter-key">API key <span id="openrouter-key-state"></span></label><input id="openrouter-key" type="password" autocomplete="off" placeholder="Enter your OpenRouter API key"><label class="checkbox"><input id="clear-openrouter" type="checkbox"> Remove saved key</label><label for="openrouter-model">Model ID</label><input id="openrouter-model" type="text"><div class="provider-links"><a href="https://openrouter.ai/keys" target="_blank" rel="noreferrer">Get a key ↗</a><button type="button" class="secondary" id="test-openrouter">Test connection</button></div></section>
+        <section class="panel settings-bottom"><div><label for="daily-cap">Local OpenRouter daily cap</label><input id="daily-cap" type="number" min="1" max="50" value="45"><p class="muted">Counts attempts from this app, including connection tests. Usage elsewhere also counts toward your provider limit.</p></div><div><label class="checkbox"><input id="remember-keys" type="checkbox"> Remember keys on this computer</label><p class="muted">Optional plain-text storage in data/settings.json. Otherwise keys last for this app session. They are never mounted into the worker container.</p></div><button class="primary" type="submit" id="save-settings">Save providers</button></section>
+      </form>
+      <div class="provider-note">Save your settings before testing. Tests make one real model request, with a possible retry. Changing providers does not make a model abliterated.</div>
+    </section>
+  </main><div id="toast" role="status" hidden></div>
+</body></html>
